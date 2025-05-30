@@ -6,11 +6,16 @@ import {
   ScrollView, 
   TouchableOpacity,
   SafeAreaView,
+  Image,
+  Dimensions,
 } from 'react-native';
 import HeroBanner from '@/components/HeroBanner';
 import DaySummary from '@/components/DaySummary';
 import { arcsData } from '@/data/habitsData';
-import { BookOpen, Dumbbell } from 'lucide-react-native';
+import { BookOpen, Dumbbell, Brain, Target, Trophy } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const [currentArcIndex, setCurrentArcIndex] = useState(0);
@@ -44,6 +49,53 @@ export default function HomeScreen() {
   const completedHabits = currentDay.habits.filter(h => h.completed).length;
   const totalHabits = currentDay.habits.length;
   
+  const dailyQuests = [
+    {
+      id: '1',
+      title: 'Knowledge Seeker',
+      description: 'Read for 45 minutes today',
+      icon: BookOpen,
+      color: '#FF4E4E',
+      xp: 150,
+      progress: 0.7
+    },
+    {
+      id: '2',
+      title: 'Mind Mastery',
+      description: 'Complete 20-minute meditation',
+      icon: Brain,
+      color: '#7A00F3',
+      xp: 100,
+      progress: 0.4
+    },
+    {
+      id: '3',
+      title: 'Physical Peak',
+      description: 'High-intensity workout session',
+      icon: Dumbbell,
+      color: '#00B4D8',
+      xp: 200,
+      progress: 0.9
+    }
+  ];
+
+  const achievements = [
+    {
+      title: 'First Victory',
+      description: 'Complete your first quest',
+      icon: Trophy,
+      progress: 100,
+      color: '#FFD700'
+    },
+    {
+      title: 'Focus Master',
+      description: '7-day meditation streak',
+      icon: Target,
+      progress: 70,
+      color: '#7A00F3'
+    }
+  ];
+  
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -54,62 +106,107 @@ export default function HomeScreen() {
           onNextDay={handleNextDay}
         />
         
-        <DaySummary
-          completedHabits={completedHabits}
-          totalHabits={totalHabits}
-        />
-        
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>DAILY CHALLENGES</Text>
-          
-          <View style={styles.challengeContainer}>
-            <View style={styles.challenge}>
-              <View style={styles.challengeIconContainer}>
-                <BookOpen color="#FF4E4E" size={24} />
-              </View>
-              
-              <View style={styles.challengeMainContent}>
-                <View style={styles.challengeTextContent}>
-                  <Text style={styles.challengeTitle}>Knowledge Quest</Text>
-                  <Text style={styles.challengeDescription}>
-                    Read for 45 minutes today instead of the usual 30
-                  </Text>
-                </View>
-                
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={[styles.button, styles.doneButton]}>
-                    <Text style={[styles.buttonText, styles.doneButtonText]}>DONE</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[styles.button, styles.skipButton]}>
-                    <Text style={[styles.buttonText, styles.skipButtonText]}>SKIP</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+        <View style={styles.statsContainer}>
+          <LinearGradient
+            colors={['rgba(122, 0, 243, 0.1)', 'rgba(255, 78, 78, 0.1)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.statsGradient}
+          >
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{completedHabits}/{totalHabits}</Text>
+              <Text style={styles.statLabel}>TODAY'S PROGRESS</Text>
             </View>
-            
-            <View style={styles.challenge}>
-              <View style={styles.challengeIconContainer}>
-                <Dumbbell color="#FF4E4E" size={24} />
-              </View>
-              
-              <View style={styles.challengeMainContent}>
-                <View style={styles.challengeTextContent}>
-                  <Text style={styles.challengeTitle}>Mind Training</Text>
-                  <Text style={styles.challengeDescription}>
-                    Complete a 20-minute focused meditation session
-                  </Text>
-                </View>
-                
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={[styles.button, styles.doneButton]}>
-                    <Text style={[styles.buttonText, styles.doneButtonText]}>DONE</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[styles.button, styles.skipButton]}>
-                    <Text style={[styles.buttonText, styles.skipButtonText]}>SKIP</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>1,250</Text>
+              <Text style={styles.statLabel}>XP EARNED</Text>
             </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>12</Text>
+              <Text style={styles.statLabel}>DAY STREAK</Text>
+            </View>
+          </LinearGradient>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>DAILY QUESTS</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.questsContainer}
+          >
+            {dailyQuests.map((quest) => {
+              const Icon = quest.icon;
+              return (
+                <TouchableOpacity 
+                  key={quest.id} 
+                  style={styles.questCard}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.questIcon, { backgroundColor: `${quest.color}20` }]}>
+                    <Icon color={quest.color} size={24} />
+                  </View>
+                  <View style={styles.questContent}>
+                    <Text style={styles.questTitle}>{quest.title}</Text>
+                    <Text style={styles.questDescription}>{quest.description}</Text>
+                    <View style={styles.questFooter}>
+                      <View style={styles.progressContainer}>
+                        <View style={[styles.progressBar, { backgroundColor: `${quest.color}20` }]}>
+                          <View 
+                            style={[
+                              styles.progressFill, 
+                              { 
+                                width: `${quest.progress * 100}%`,
+                                backgroundColor: quest.color 
+                              }
+                            ]} 
+                          />
+                        </View>
+                        <Text style={[styles.xpText, { color: quest.color }]}>
+                          +{quest.xp} XP
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>ACHIEVEMENTS</Text>
+          <View style={styles.achievementsGrid}>
+            {achievements.map((achievement, index) => {
+              const Icon = achievement.icon;
+              return (
+                <View key={index} style={styles.achievementCard}>
+                  <View style={[styles.achievementIcon, { backgroundColor: `${achievement.color}20` }]}>
+                    <Icon color={achievement.color} size={24} />
+                  </View>
+                  <Text style={styles.achievementTitle}>{achievement.title}</Text>
+                  <Text style={styles.achievementDesc}>{achievement.description}</Text>
+                  <View style={styles.achievementProgress}>
+                    <View style={[styles.progressBar, { backgroundColor: `${achievement.color}20` }]}>
+                      <View 
+                        style={[
+                          styles.progressFill, 
+                          { 
+                            width: `${achievement.progress}%`,
+                            backgroundColor: achievement.color 
+                          }
+                        ]} 
+                      />
+                    </View>
+                    <Text style={[styles.progressText, { color: achievement.color }]}>
+                      {achievement.progress}%
+                    </Text>
+                  </View>
+                </View>
+              );
+            })}
           </View>
         </View>
       </ScrollView>
@@ -125,8 +222,48 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  sectionContainer: {
-    marginTop: 16,
+  statsContainer: {
+    marginTop: -20,
+    marginHorizontal: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  statsGradient: {
+    flexDirection: 'row',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statValue: {
+    fontFamily: 'Rajdhani-Bold',
+    fontSize: 24,
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontFamily: 'SpaceMono-Regular',
+    fontSize: 10,
+    color: '#DCDCDC',
+    opacity: 0.7,
+    letterSpacing: 1,
+  },
+  statDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: 'rgba(220, 220, 220, 0.1)',
+    marginHorizontal: 10,
+  },
+  section: {
+    marginTop: 24,
     marginHorizontal: 20,
   },
   sectionTitle: {
@@ -136,85 +273,107 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     letterSpacing: 1,
   },
-  challengeContainer: {
-    marginBottom: 24,
+  questsContainer: {
+    paddingRight: 20,
   },
-  challenge: {
+  questCard: {
+    width: width * 0.7,
     backgroundColor: 'rgba(30, 30, 30, 0.8)',
-    borderRadius: 12,
+    borderRadius: 16,
+    marginRight: 16,
     padding: 16,
-    paddingLeft: 16,
-    marginBottom: 16,
     borderWidth: 1,
     borderColor: '#5A5A5A',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    overflow: 'hidden',
-    minHeight: 160,
-    position: 'relative',
   },
-  challengeIconContainer: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: 'rgba(255, 78, 78, 0.1)',
+  questIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
-    alignSelf: 'flex-start',
+    marginBottom: 16,
   },
-  challengeMainContent: {
+  questContent: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
   },
-  challengeTextContent: {
-    flex: 1,
-    marginRight: 24,
-    alignSelf: 'flex-start',
-  },
-  challengeTitle: {
+  questTitle: {
     fontFamily: 'Rajdhani-Bold',
-    fontSize: 22,
-    color: '#DCDCDC',
-    marginBottom: 10,
+    fontSize: 20,
+    color: '#FFFFFF',
+    marginBottom: 8,
   },
-  challengeDescription: {
+  questDescription: {
     fontFamily: 'Rajdhani-Regular',
-    fontSize: 16,
+    fontSize: 14,
     color: '#DCDCDC',
-    lineHeight: 24,
+    opacity: 0.7,
+    marginBottom: 16,
   },
-  buttonContainer: {
-    flexDirection: 'column',
-    gap: 12,
-    minWidth: 100,
+  questFooter: {
+    marginTop: 'auto',
   },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 6,
-    borderWidth: 1,
+  progressContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  buttonText: {
+  progressBar: {
+    flex: 1,
+    height: 4,
+    borderRadius: 2,
+    marginRight: 12,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
+  xpText: {
+    fontFamily: 'SpaceMono-Bold',
+    fontSize: 12,
+  },
+  achievementsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  achievementCard: {
+    width: '48%',
+    backgroundColor: 'rgba(30, 30, 30, 0.8)',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#5A5A5A',
+  },
+  achievementIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  achievementTitle: {
+    fontFamily: 'Rajdhani-Bold',
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  achievementDesc: {
+    fontFamily: 'Rajdhani-Regular',
+    fontSize: 12,
+    color: '#DCDCDC',
+    opacity: 0.7,
+    marginBottom: 12,
+  },
+  achievementProgress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  progressText: {
     fontFamily: 'SpaceMono-Regular',
-    fontSize: 13,
-    letterSpacing: 1,
-  },
-  doneButton: {
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-    borderColor: '#4CAF50',
-  },
-  doneButtonText: {
-    color: '#4CAF50',
-  },
-  skipButton: {
-    backgroundColor: 'rgba(244, 67, 54, 0.1)',
-    borderColor: '#F44336',
-  },
-  skipButtonText: {
-    color: '#F44336',
+    fontSize: 12,
   },
 });
