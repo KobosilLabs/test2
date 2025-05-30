@@ -12,7 +12,7 @@ import {
 import HeroBanner from '@/components/HeroBanner';
 import DaySummary from '@/components/DaySummary';
 import { arcsData } from '@/data/habitsData';
-import { BookOpen, Dumbbell, Brain, Target, Trophy, Sparkles, Clock, Flame } from 'lucide-react-native';
+import { Brain, Target, Trophy, Sparkles, Clock, Flame } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
@@ -48,13 +48,13 @@ export default function HomeScreen() {
   
   const completedHabits = currentDay.habits.filter(h => h.completed).length;
   const totalHabits = currentDay.habits.length;
-  
+
   const dailyQuests = [
     {
       id: '1',
       title: 'Knowledge Seeker',
       description: 'Read for 45 minutes today',
-      icon: BookOpen,
+      image: 'https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg',
       color: '#FF4E4E',
       timeLeft: '2h 30m',
       streak: 3
@@ -63,7 +63,7 @@ export default function HomeScreen() {
       id: '2',
       title: 'Mind Mastery',
       description: 'Complete 20-minute meditation',
-      icon: Brain,
+      image: 'https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg',
       color: '#7A00F3',
       timeLeft: '5h 45m',
       streak: 7
@@ -72,7 +72,7 @@ export default function HomeScreen() {
       id: '3',
       title: 'Physical Peak',
       description: 'High-intensity workout session',
-      icon: Dumbbell,
+      image: 'https://images.pexels.com/photos/4498151/pexels-photo-4498151.jpeg',
       color: '#00B4D8',
       timeLeft: '1h 15m',
       streak: 5
@@ -95,7 +95,7 @@ export default function HomeScreen() {
       color: '#7A00F3'
     }
   ];
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -133,54 +133,57 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>DAILY QUESTS</Text>
           <View style={styles.questsContainer}>
-            {dailyQuests.map((quest) => {
-              const Icon = quest.icon;
-              return (
-                <View key={quest.id} style={styles.questCard}>
-                  <View style={styles.questMain}>
-                    <View style={[styles.questIcon, { backgroundColor: `${quest.color}20` }]}>
-                      <Icon color={quest.color} size={24} />
-                    </View>
-                    <View style={styles.questContent}>
+            {dailyQuests.map((quest) => (
+              <View key={quest.id} style={styles.questCard}>
+                <Image
+                  source={{ uri: quest.image }}
+                  style={styles.questImage}
+                />
+                <LinearGradient
+                  colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
+                  style={styles.questOverlay}
+                >
+                  <View style={styles.questContent}>
+                    <View style={styles.questHeader}>
                       <Text style={styles.questTitle}>{quest.title}</Text>
                       <Text style={styles.questDescription}>{quest.description}</Text>
-                      
-                      <View style={styles.questMetrics}>
-                        <View style={styles.metricItem}>
-                          <Clock size={14} color={quest.color} />
-                          <Text style={[styles.metricText, { color: quest.color }]}>
-                            {quest.timeLeft}
-                          </Text>
-                        </View>
-                        <View style={styles.metricItem}>
-                          <Flame size={14} color={quest.color} />
-                          <Text style={[styles.metricText, { color: quest.color }]}>
-                            {quest.streak} streak
-                          </Text>
-                        </View>
+                    </View>
+                    
+                    <View style={styles.questMetrics}>
+                      <View style={styles.metricItem}>
+                        <Clock size={14} color={quest.color} />
+                        <Text style={[styles.metricText, { color: quest.color }]}>
+                          {quest.timeLeft}
+                        </Text>
+                      </View>
+                      <View style={styles.metricItem}>
+                        <Flame size={14} color={quest.color} />
+                        <Text style={[styles.metricText, { color: quest.color }]}>
+                          {quest.streak} streak
+                        </Text>
                       </View>
                     </View>
                   </View>
-                  
-                  <View style={styles.questActions}>
-                    <TouchableOpacity 
-                      style={[styles.actionButton, styles.skipButton]}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={styles.skipButtonText}>SKIP</Text>
-                    </TouchableOpacity>
+                </LinearGradient>
+                
+                <View style={styles.questActions}>
+                  <TouchableOpacity 
+                    style={[styles.actionButton, styles.skipButton]}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.skipButtonText}>SKIP</Text>
+                  </TouchableOpacity>
 
-                    <TouchableOpacity 
-                      style={[styles.actionButton, styles.doneButton]}
-                      activeOpacity={0.8}
-                    >
-                      <Sparkles color="#4CAF50" size={16} />
-                      <Text style={styles.doneButtonText}>COMPLETE</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity 
+                    style={[styles.actionButton, styles.doneButton]}
+                    activeOpacity={0.8}
+                  >
+                    <Sparkles color="#4CAF50" size={16} />
+                    <Text style={styles.doneButtonText}>COMPLETE</Text>
+                  </TouchableOpacity>
                 </View>
-              );
-            })}
+              </View>
+            ))}
           </View>
         </View>
 
@@ -290,34 +293,35 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#5A5A5A',
     overflow: 'hidden',
+    marginBottom: 16,
   },
-  questMain: {
-    flexDirection: 'row',
+  questImage: {
+    width: '100%',
+    height: 160,
+  },
+  questOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     padding: 16,
   },
-  questIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
   questContent: {
-    flex: 1,
+    gap: 12,
+  },
+  questHeader: {
+    gap: 4,
   },
   questTitle: {
     fontFamily: 'Rajdhani-Bold',
-    fontSize: 20,
+    fontSize: 24,
     color: '#FFFFFF',
-    marginBottom: 8,
   },
   questDescription: {
     fontFamily: 'Rajdhani-Regular',
     fontSize: 14,
     color: '#DCDCDC',
-    opacity: 0.7,
-    marginBottom: 16,
+    opacity: 0.9,
   },
   questMetrics: {
     flexDirection: 'row',
