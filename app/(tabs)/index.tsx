@@ -12,7 +12,7 @@ import {
 import HeroBanner from '@/components/HeroBanner';
 import DaySummary from '@/components/DaySummary';
 import { arcsData } from '@/data/habitsData';
-import { BookOpen, Dumbbell, Brain, Target, Trophy } from 'lucide-react-native';
+import { BookOpen, Dumbbell, Brain, Target, Trophy, Sparkles } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
@@ -132,26 +132,18 @@ export default function HomeScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>DAILY QUESTS</Text>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.questsContainer}
-          >
+          <View style={styles.questsContainer}>
             {dailyQuests.map((quest) => {
               const Icon = quest.icon;
               return (
-                <TouchableOpacity 
-                  key={quest.id} 
-                  style={styles.questCard}
-                  activeOpacity={0.7}
-                >
-                  <View style={[styles.questIcon, { backgroundColor: `${quest.color}20` }]}>
-                    <Icon color={quest.color} size={24} />
-                  </View>
-                  <View style={styles.questContent}>
-                    <Text style={styles.questTitle}>{quest.title}</Text>
-                    <Text style={styles.questDescription}>{quest.description}</Text>
-                    <View style={styles.questFooter}>
+                <View key={quest.id} style={styles.questCard}>
+                  <View style={styles.questMain}>
+                    <View style={[styles.questIcon, { backgroundColor: `${quest.color}20` }]}>
+                      <Icon color={quest.color} size={24} />
+                    </View>
+                    <View style={styles.questContent}>
+                      <Text style={styles.questTitle}>{quest.title}</Text>
+                      <Text style={styles.questDescription}>{quest.description}</Text>
                       <View style={styles.progressContainer}>
                         <View style={[styles.progressBar, { backgroundColor: `${quest.color}20` }]}>
                           <View 
@@ -170,10 +162,27 @@ export default function HomeScreen() {
                       </View>
                     </View>
                   </View>
-                </TouchableOpacity>
+                  
+                  <View style={styles.questActions}>
+                    <TouchableOpacity 
+                      style={[styles.actionButton, styles.doneButton]}
+                      activeOpacity={0.8}
+                    >
+                      <Sparkles color="#4CAF50" size={16} />
+                      <Text style={styles.doneButtonText}>COMPLETE</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.actionButton, styles.skipButton]}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={styles.skipButtonText}>SKIP</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               );
             })}
-          </ScrollView>
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -274,16 +283,18 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   questsContainer: {
-    paddingRight: 20,
+    gap: 16,
   },
   questCard: {
-    width: width * 0.7,
     backgroundColor: 'rgba(30, 30, 30, 0.8)',
     borderRadius: 16,
-    marginRight: 16,
-    padding: 16,
     borderWidth: 1,
     borderColor: '#5A5A5A',
+    overflow: 'hidden',
+  },
+  questMain: {
+    flexDirection: 'row',
+    padding: 16,
   },
   questIcon: {
     width: 48,
@@ -291,7 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginRight: 16,
   },
   questContent: {
     flex: 1,
@@ -308,9 +319,6 @@ const styles = StyleSheet.create({
     color: '#DCDCDC',
     opacity: 0.7,
     marginBottom: 16,
-  },
-  questFooter: {
-    marginTop: 'auto',
   },
   progressContainer: {
     flexDirection: 'row',
@@ -331,6 +339,39 @@ const styles = StyleSheet.create({
   xpText: {
     fontFamily: 'SpaceMono-Bold',
     fontSize: 12,
+  },
+  questActions: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderTopColor: '#5A5A5A',
+  },
+  actionButton: {
+    flex: 1,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  doneButton: {
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    borderRightWidth: 1,
+    borderRightColor: '#5A5A5A',
+  },
+  skipButton: {
+    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+  },
+  doneButtonText: {
+    fontFamily: 'SpaceMono-Bold',
+    fontSize: 14,
+    color: '#4CAF50',
+    letterSpacing: 1,
+  },
+  skipButtonText: {
+    fontFamily: 'SpaceMono-Bold',
+    fontSize: 14,
+    color: '#F44336',
+    letterSpacing: 1,
   },
   achievementsGrid: {
     flexDirection: 'row',
