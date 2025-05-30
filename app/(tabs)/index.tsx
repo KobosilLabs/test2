@@ -12,7 +12,7 @@ import {
 import HeroBanner from '@/components/HeroBanner';
 import DaySummary from '@/components/DaySummary';
 import { arcsData } from '@/data/habitsData';
-import { BookOpen, Dumbbell, Brain, Target, Trophy, Sparkles } from 'lucide-react-native';
+import { BookOpen, Dumbbell, Brain, Target, Trophy, Sparkles, Clock, Flame } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
@@ -57,7 +57,9 @@ export default function HomeScreen() {
       icon: BookOpen,
       color: '#FF4E4E',
       xp: 150,
-      progress: 0.7
+      progress: 0.7,
+      timeLeft: '2h 30m',
+      streak: 3
     },
     {
       id: '2',
@@ -66,7 +68,9 @@ export default function HomeScreen() {
       icon: Brain,
       color: '#7A00F3',
       xp: 100,
-      progress: 0.4
+      progress: 0.4,
+      timeLeft: '5h 45m',
+      streak: 7
     },
     {
       id: '3',
@@ -75,7 +79,9 @@ export default function HomeScreen() {
       icon: Dumbbell,
       color: '#00B4D8',
       xp: 200,
-      progress: 0.9
+      progress: 0.9,
+      timeLeft: '1h 15m',
+      streak: 5
     }
   ];
 
@@ -144,6 +150,22 @@ export default function HomeScreen() {
                     <View style={styles.questContent}>
                       <Text style={styles.questTitle}>{quest.title}</Text>
                       <Text style={styles.questDescription}>{quest.description}</Text>
+                      
+                      <View style={styles.questMetrics}>
+                        <View style={styles.metricItem}>
+                          <Clock size={14} color={quest.color} />
+                          <Text style={[styles.metricText, { color: quest.color }]}>
+                            {quest.timeLeft}
+                          </Text>
+                        </View>
+                        <View style={styles.metricItem}>
+                          <Flame size={14} color={quest.color} />
+                          <Text style={[styles.metricText, { color: quest.color }]}>
+                            {quest.streak} streak
+                          </Text>
+                        </View>
+                      </View>
+
                       <View style={styles.progressContainer}>
                         <View style={[styles.progressBar, { backgroundColor: `${quest.color}20` }]}>
                           <View 
@@ -165,18 +187,18 @@ export default function HomeScreen() {
                   
                   <View style={styles.questActions}>
                     <TouchableOpacity 
+                      style={[styles.actionButton, styles.skipButton]}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={styles.skipButtonText}>SKIP</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
                       style={[styles.actionButton, styles.doneButton]}
                       activeOpacity={0.8}
                     >
                       <Sparkles color="#4CAF50" size={16} />
                       <Text style={styles.doneButtonText}>COMPLETE</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity 
-                      style={[styles.actionButton, styles.skipButton]}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={styles.skipButtonText}>SKIP</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -320,6 +342,20 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     marginBottom: 16,
   },
+  questMetrics: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 12,
+  },
+  metricItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  metricText: {
+    fontFamily: 'SpaceMono-Regular',
+    fontSize: 12,
+  },
   progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -353,13 +389,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
   },
-  doneButton: {
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+  skipButton: {
+    backgroundColor: 'rgba(244, 67, 54, 0.1)',
     borderRightWidth: 1,
     borderRightColor: '#5A5A5A',
   },
-  skipButton: {
-    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+  doneButton: {
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
   },
   doneButtonText: {
     fontFamily: 'SpaceMono-Bold',
