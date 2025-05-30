@@ -56,8 +56,6 @@ export default function HomeScreen() {
       description: 'Read for 45 minutes today',
       icon: BookOpen,
       color: '#FF4E4E',
-      xp: 150,
-      progress: 0.7,
       timeLeft: '2h 30m',
       streak: 3
     },
@@ -67,8 +65,6 @@ export default function HomeScreen() {
       description: 'Complete 20-minute meditation',
       icon: Brain,
       color: '#7A00F3',
-      xp: 100,
-      progress: 0.4,
       timeLeft: '5h 45m',
       streak: 7
     },
@@ -78,8 +74,6 @@ export default function HomeScreen() {
       description: 'High-intensity workout session',
       icon: Dumbbell,
       color: '#00B4D8',
-      xp: 200,
-      progress: 0.9,
       timeLeft: '1h 15m',
       streak: 5
     }
@@ -164,23 +158,6 @@ export default function HomeScreen() {
                             {quest.streak} streak
                           </Text>
                         </View>
-                      </View>
-
-                      <View style={styles.progressContainer}>
-                        <View style={[styles.progressBar, { backgroundColor: `${quest.color}20` }]}>
-                          <View 
-                            style={[
-                              styles.progressFill, 
-                              { 
-                                width: `${quest.progress * 100}%`,
-                                backgroundColor: quest.color 
-                              }
-                            ]} 
-                          />
-                        </View>
-                        <Text style={[styles.xpText, { color: quest.color }]}>
-                          +{quest.xp} XP
-                        </Text>
                       </View>
                     </View>
                   </View>
@@ -345,7 +322,6 @@ const styles = StyleSheet.create({
   questMetrics: {
     flexDirection: 'row',
     gap: 16,
-    marginBottom: 12,
   },
   metricItem: {
     flexDirection: 'row',
@@ -354,26 +330,6 @@ const styles = StyleSheet.create({
   },
   metricText: {
     fontFamily: 'SpaceMono-Regular',
-    fontSize: 12,
-  },
-  progressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  progressBar: {
-    flex: 1,
-    height: 4,
-    borderRadius: 2,
-    marginRight: 12,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 2,
-  },
-  xpText: {
-    fontFamily: 'SpaceMono-Bold',
     fontSize: 12,
   },
   questActions: {
@@ -448,6 +404,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  progressBar: {
+    flex: 1,
+    height: 4,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 2,
   },
   progressText: {
     fontFamily: 'SpaceMono-Regular',
